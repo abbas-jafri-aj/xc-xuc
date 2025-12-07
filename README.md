@@ -1,79 +1,87 @@
-# dnf - A Simple `apt` Wrapper for Ubuntu/Debian
+# xc-xuc
 
-`dnf` is a Bash script that translates common `dnf` commands to `apt` on Ubuntu and Debian systems. It does **not** emulate `dnf`; it simply forwards supported commands and flags directly to `apt`.
+xc-xuc is a pair of Bash scripts for easily compressing and decompressing files on Unix-like systems. It detects file types and runs the appropriate compression or decompression command automatically.
 
-## Features
+## Scripts
 
-- Supports basic `dnf` commands:
-  - `install`
-  - `remove` / `erase`
-  - `update`
-  - `upgrade`
-  - `autoremove`
-  - `list`
-  - `info`
-  - `search`
-  - `clean`
-- Minimal setup: just a script, no dependencies.
-- Provides a simple `help` command.
+### xc.sh — Compress Any File
 
-## Usage
+Detects a file’s intended extension and compresses it using the appropriate tool.
 
-1. **Name the file** to `dnf` (not `dnf.sh`) to allow it to behave like the real `dnf` command.
-2. **Make it executable**:
+Usage:
 
-```bash
-chmod +x dnf
-```
+./xc.sh source_file target_file.ext
 
-3. **Place it in your `PATH`**:
+Example:
 
-   - Move it to a directory already in your `PATH` (e.g., `/usr/local/bin/`)  
-     ```bash
-     sudo mv dnf /usr/local/bin/
-     ```
-   - Or add the directory containing `dnf` to your `PATH`.
+./xc.sh report.txt report.zip
 
-4. **Run commands as you would with `dnf`:**
+Supported Formats:
 
-```bash
-dnf install package_name
-dnf remove package_name
-dnf update
-dnf upgrade
-dnf autoremove
-dnf list
-dnf info package_name
-dnf search package_name
-dnf clean
-```
+7z
+xz
+zip
+zst (Zstandard)
+bzip2
+gzip
+tar
 
-5. **Help command:**
+Features:
 
-```bash
-dnf help
-dnf --help
-```
-
-## Example
-
-```bash
-# Install git using dnf (actually uses apt under the hood)
-dnf install git
-
-# Remove a package
-dnf remove vim
-
-# Update package lists
-dnf update
-
-# Upgrade installed packages
-dnf upgrade
-```
-
-## Notes
-
-- This script is intended for users transitioning from `dnf` (Fedora/RHEL) to `apt` (Ubuntu/Debian).
-- Unsupported or unknown commands will produce an error message and suggest using `dnf help`.
+Auto-detects compression type based on target file extension.
+Checks if source file exists and target file does not exist.
+Optional debug mode: TRACE=1 ./xc.sh file target.ext
+Uses associative arrays for mapping extensions to programs.
 
 ---
+
+### xuc.sh — Uncompress Any File
+
+Detects a file’s compression type and runs the correct decompression command.
+
+Usage:
+
+./xuc.sh file_to_uncompress
+
+Example:
+
+./xuc.sh archive.zip
+
+Supported Formats:
+
+7-zip
+XZ
+Zip
+Zstandard
+bzip2
+gzip
+tar
+
+Features:
+
+Auto-detects compression type using the file utility.
+Validates that the file exists.
+Optional debug mode: TRACE=1 ./xuc.sh file_to_uncompress
+Uses associative arrays for mapping file types to programs.
+
+---
+
+## Requirements
+
+Bash 4.0 or higher (for associative arrays)
+Installed compression utilities (7z, xz, zip, zstd, bzip2, gzip, tar)
+file utility (for xuc.sh)
+
+---
+
+## Installation
+
+git clone https://github.com/<username>/xc-xuc.git
+cd xc-xuc
+chmod +x xc.sh xuc.sh
+
+---
+
+## License
+
+GNU General Public License v3.0
