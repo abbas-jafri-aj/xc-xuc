@@ -76,7 +76,7 @@ file utility (for xuc.sh)
 
 ## Installation
 ```bsh
-git clone https://github.com/<username>/xc-xuc.git
+git clone https://github.com/abbas-jafri-aj/xc-xuc.git
 cd xc-xuc
 chmod +x xc.sh xuc.sh
 ```
